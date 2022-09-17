@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+        <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title> X04 - TEAM - X04 </title>
+    <!-- Favicon icon -->
+	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body style="text-aling: center">
+    <h1>Enviar mensagens (beta) </h1>
+    <br>
+    
+      <input type="text" name="user" id="user" value="5511981458247" />
+      <br>
+      <input type="text" name="texto" id="texto" value="Olá " />
+      <br>
+      <br>
+      <button id="sexo">Enviar</button>
+    
+  </body>
+</html>
+
+<script>
+  $("#sexo").click(() => {
+       $(this).attr("value", "AGUARDE...");
+   $(this).attr("disabled", true);
+
+  var from = document.getElementById("user").value;
+  var mensagem = document.getElementById("texto").value;
+  
+  $.ajax({
+  url: `api/${from}/${mensagem}`,
+  type: 'GET', 
+  dataType: "json",
+  success: function(retorno){
+    if (retorno.success == true){
+      Swal.fire({
+        title: "Sucesso", 
+        text: "Mensagem enviada!", 
+        icon: "success",
+        showConfirmButton: false, 
+        timer: 3000, 
+        position: "top-end"
+      })
+    }
+    else {
+      Swal.fire({
+        title: "Erro", 
+        text: retorno.message, 
+        icon: "error",
+        showConfirmButton: false, 
+        timer: 3000, 
+        position: "top-end"
+      }) 
+    }
+  }
+  }
+  )}) 
+</script>
