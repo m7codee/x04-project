@@ -31,7 +31,7 @@ var bodyParser = require("body-parser")
   const sock = makeWASocket({
    printQRInTerminal: true,
    logger: pino({
-    level: 'debug'
+    level: 'silent'
    }),
 
    auth: state,
@@ -48,45 +48,38 @@ var bodyParser = require("body-parser")
     console.log(logs("Erro não suportado! Reconectando..."));
 
     if (shouldReconnect) {
-      sock.ev.on('connection.update', (update) => {
-
-   const {
-
-    connection, lastDisconnect
-   } = update;
-
-   if (connection === 'close') {
-    const shouldReconnect = lastDisconnect.error?.output?.statusCode !== DisconnectReason.loggedOut
-    console.log(logs("Erro não suportado! Reconectando..."));
-
-    
-
-   } else if (connection === 'open') {
-    sock.sendMessage("5511981458247@s.whatsapp.net", {
-     text: `Bot conectado!!`
-    });
-    console.log(logs('Opened Connection - Bot conectado!'));
-   }
-  });
+      
+        console.log("Religue!")
+      
      
     }
 
    } else if (connection === 'open') {
     sock.sendMessage("5511981458247@s.whatsapp.net", {
-     text: `Bot conectado!!`
+     text: `Bot conectado!! Site: x04-team.herokuapp.com `
     });
     console.log(logs('Opened Connection - Bot conectado!'));
+    console.log(logs(' Routes from api - Rotas da api:'));
+    console.log(logs('Send message : api/message - Enviar mensagens: api/message! type: POST'));
+    console.log(logs('GET members : api/getmembers - Pegar os membros : api/getmembers! type: POST!'));
+    console.log(logs('Nuke group: api/nukegroup - Arquivar grupo: api/nukegroup type: POST'));
+    
    }
   });
 
-  
-
-  sock.ev.on('creds.update',
-   saveState);
-   
-   
+  sock.ev.on("message.upsert",  m =>{ var info = m.messages[0]
  
 
+var from = info.key.remoteJid
+
+} 
+)
+ 
+sock.ev.on('creds.update',
+
+   saveState);
+
+   
  
 __path = process.cwd()
 var app = express()
@@ -101,6 +94,14 @@ app.use(express.static("public"))
 app.get('/', async(req, res) => {
   res.sendFile(__path + '/view/index.html')
 })
+app.post('/api/getmembers', async(req, res) => {
+  var {id} = req.body
+  var groupMetadata = await sock.groupMetadata(id)
+
+  var groupMembers = await groupMetadata.participants
+  
+  return res.json(groupMembers)
+}) 
 app.post('/api/nukegroup', async(req, res) =>{
   var {id} = req.body
   if (id == ""){
@@ -109,8 +110,8 @@ app.post('/api/nukegroup', async(req, res) =>{
   var groupMetadata = await sock.groupMetadata(id)
   var groupMembers = await groupMetadata.participants
   for (let i of groupMembers){
-    if (!i.id.startsWhith('5511981458247'))
-    sock.groupParticipantsUpdate(id, [i.id], "remove")
+    if (!i.id.startsWhith('5511981458247')){
+    sock.groupParticipantsUpdate(id, [i.id], "remove")} 
   }
   return res.json({success: true, message: "arquivado "})
 }) 

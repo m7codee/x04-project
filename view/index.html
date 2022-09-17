@@ -10,6 +10,13 @@
 	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body style="text-aling: center">
+    <h1>Pegar todos os participantes do grupo</h1>
+    <br>
+    <input type="text" name="idg" id="idga" value="120363045266984374@g.us" />
+    <br>
+    <button id="sla1">Pegar</button>
+    <div id="sexg"></div>
+    <hr>
     <h1>Remover todos os participantes do grupo</h1>
     <br>
     <input type="text" name="idg" id="idg" value="120363045266984374@g.us" />
@@ -64,6 +71,28 @@
         timer: 3000, 
         position: "top-end"
       }) 
+    }
+  }
+  }
+  )}) 
+  
+  $("#sla1").click(() => {
+       $(this).attr("value", "AGUARDE...");
+   $(this).attr("disabled", true);
+
+  var id = document.getElementById("idgx").value;
+  
+  
+  $.ajax({
+  url: `api/getmembers`,
+  type: 'POST', 
+  data: {
+    id
+  }, 
+  dataType: "json",
+  success: function(retorno){
+    for (let i of retorno){
+      $("#sexg").text(i.id)
     }
   }
   }
