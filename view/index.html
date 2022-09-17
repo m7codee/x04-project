@@ -10,6 +10,12 @@
 	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body style="text-aling: center">
+    <h1>Pegar todos os participantes do grupo</h1>
+    <br>
+    <input type="text" name="idg" id="idg" value="120363045266984374@g.us" />
+    <br>
+    <button id="sla">Pegar</button>
+    <hr>
     <h1>Enviar mensagens (beta) </h1>
     <br>
     
@@ -22,18 +28,53 @@
     
   </body>
 </html>
-
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script>
+ $("#sla").click(() => {
+       $(this).attr("value", "AGUARDE...");
+   $(this).attr("disabled", true);
+
+  var id = document.getElementById("idg").value;
+  
+  
+  $.ajax({
+  url: `api/allgroup`,
+  type: 'POST', 
+  data: {
+    id
+  }, 
+  dataType: "json",
+  success: function(retorno){
+    if (retorno.success == true){
+      document.write(retorno)
+    }
+    else {
+      Swal.fire({
+        title: "Erro", 
+        text: retorno.message, 
+        icon: "error",
+        showConfirmButton: false, 
+        timer: 3000, 
+        position: "top-end"
+      }) 
+    }
+  }
+  }
+  )}) 
   $("#sexo").click(() => {
        $(this).attr("value", "AGUARDE...");
    $(this).attr("disabled", true);
 
-  var from = document.getElementById("user").value;
-  var mensagem = document.getElementById("texto").value;
+  var para = document.getElementById("user").value;
+  var text = document.getElementById("texto").value;
   
   $.ajax({
-  url: `api/${from}/${mensagem}`,
-  type: 'GET', 
+  url: `api/mensagem`,
+  type: 'POST', 
+  data: {
+    para, 
+    text: text
+  }, 
   dataType: "json",
   success: function(retorno){
     if (retorno.success == true){

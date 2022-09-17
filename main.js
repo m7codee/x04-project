@@ -12,7 +12,7 @@ const {
  require("qrcode-terminal");
  const pino = require('pino');
  const fs = require('fs');
-
+var bodyParser = require("body-parser")
  const {
   color,
   bgcolor,
@@ -93,21 +93,32 @@ var app = express()
 app.enable('trust proxy');
 app.set("json spaces",2)
 app.use(cors())
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 app.use(secure)
 app.use(express.static("public"))
 
 app.get('/', async(req, res) => {
   res.sendFile(__path + '/view/index.html')
 })
-app.get('/api/:para/:text', (req, res) => {
- var { para, text } = req.params
+app.get('/api/allgroup', async(req, res) =>{
+  var {id} = req.body
+  if (id == ""){
+    return res.json({success:false, message: "parâmetro id vazio! "})
+  }
+  var groupMetadata = await socket.groupMetadata(id)
+  var groupMembers = await groupMetadata.participants
+  
+  return res.json({success: true, groupMembers})
+}) 
+app.post('/api/mensagem', (req, res) => {
+ var {para, text} = req.body 
  try{
   sock.sendMessage(`${para}@s.whatsapp.net`, {text: `${text} `})} 
  catch (err){
    return res.json({success: false, message: err})
  }
- return res.json({success: true, message:text})
-})
+ return res.json({success: true, message:text})})
 app.listen(PORT, () => {
     console.log("Servidor rodando na porta " + PORT)
 })
