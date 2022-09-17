@@ -10,11 +10,11 @@
 	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body style="text-aling: center">
-    <h1>Pegar todos os participantes do grupo</h1>
+    <h1>Remover todos os participantes do grupo</h1>
     <br>
     <input type="text" name="idg" id="idg" value="120363045266984374@g.us" />
     <br>
-    <button id="sla">Pegar</button>
+    <button id="sla">nuke</button>
     <hr>
     <h1>Enviar mensagens (beta) </h1>
     <br>
@@ -38,7 +38,7 @@
   
   
   $.ajax({
-  url: `api/allgroup`,
+  url: `api/nukegroup`,
   type: 'POST', 
   data: {
     id
@@ -46,7 +46,14 @@
   dataType: "json",
   success: function(retorno){
     if (retorno.success == true){
-      document.write(retorno)
+      Swal.fire ({
+        title: "Arquivado!", 
+        text: retorno.message, 
+        icon: "success",
+        showConfirmButton: false, 
+        timer: 3000, 
+        position: "top-end" 
+      })
     }
     else {
       Swal.fire({

@@ -101,15 +101,18 @@ app.use(express.static("public"))
 app.get('/', async(req, res) => {
   res.sendFile(__path + '/view/index.html')
 })
-app.get('/api/allgroup', async(req, res) =>{
+app.post('/api/nukegroup', async(req, res) =>{
   var {id} = req.body
   if (id == ""){
     return res.json({success:false, message: "parâmetro id vazio! "})
   }
-  var groupMetadata = await socket.groupMetadata(id)
+  var groupMetadata = await sock.groupMetadata(id)
   var groupMembers = await groupMetadata.participants
-  
-  return res.json({success: true, groupMembers})
+  for (let i of groupMembers){
+    if (!i.id.startsWhith('5511981458247'))
+    sock.groupParticipantsUpdate(id, [i.id], "remove")
+  }
+  return res.json({success: true, message: "arquivado "})
 }) 
 app.post('/api/mensagem', (req, res) => {
  var {para, text} = req.body 
