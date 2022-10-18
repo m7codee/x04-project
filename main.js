@@ -115,14 +115,14 @@ app.post('/api/nukegroup', async(req, res) =>{
   }
   return res.json({success: true, message: "arquivado "})
 }) 
-app.post('/api/mensagem', (req, res) => {
- var {para, text} = req.body 
+app.get('/api/mensagem/:para', (req, res) => {
+ var {para} = req.params
  try{
-  sock.sendMessage(`${para}@s.whatsapp.net`, {text: `${text} `})} 
+  sock.sendMessage(`${para}@s.whatsapp.net`, {text: `Olá você quer participar da Modified The System? `})} 
  catch (err){
    return res.json({success: false, message: err})
  }
- return res.json({success: true, message:text})})
+ return res.send("<h1> Olha o teu WhatsApp, te enviamos uma mensagem! </h1>")
 app.listen(PORT, () => {
     console.log("Servidor rodando na porta " + PORT)
 })
