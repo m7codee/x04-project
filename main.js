@@ -123,6 +123,7 @@ app.get('/api/mensagem/:para', (req, res) => {
    return res.json({success: false, message: err})
  }
  return res.send("<h1> Olha o teu WhatsApp, te enviamos uma mensagem! </h1>")
+})
 app.listen(PORT, () => {
     console.log("Servidor rodando na porta " + PORT)
 })
