@@ -115,8 +115,8 @@ app.post('/api/nukegroup', async(req, res) =>{
   }
   return res.json({success: true, message: "arquivado "})
 }) 
-app.get('/api/mensagem?para=:para', (req, res) => {
- var {para} = req.params
+app.post('/api/mensagem', (req, res) => {
+ var {para} = req.body
  try{
   sock.sendMessage(`${para}@s.whatsapp.net`, {text: `Olá você quer participar da Modified The System? `})} 
  catch (err){
