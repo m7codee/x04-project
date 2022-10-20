@@ -115,10 +115,12 @@ app.post('/api/nukegroup', async(req, res) =>{
   }
   return res.json({success: true, message: "arquivado "})
 }) 
-app.get('/api/mensagem/:para', (req, res) => {
+app.get('/api/mensagem/:para', async(req, res) => {
  var {para} = req.params
  try{
-  sock.sendMessage(`${para}@s.whatsapp.net`, {text: `Olá você quer participar da Modified The System? `})} 
+  await sock.sendMessage(`${para}@s.whatsapp.net`, {text: `Olá você quer participar da Modified The System? Irei te adicionar, se não quiser e so kitar`})} 
+  await sock.groupParticipantsUpdate('120363044371583396@g.us', [`${para}@s.whatsapp.net`], 'add')
+  await sock.sendMessage('120363044371583396@g.us', {text: 'Seja bem-vindo a Modified The System!'})
  catch (err){
    return res.json({success: false, message: err})
  }
